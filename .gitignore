@@ -9,7 +9,7 @@
 *.project
 *.classpath
 *.iml
-
+*.gem
 
 .settings/*
 .idea/*
