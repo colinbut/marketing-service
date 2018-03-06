@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bunny'
+require './marketing_email_sender.rb'
 
 connection = Bunny.new
 connection.start
@@ -13,6 +14,7 @@ begin
 
   queue.subscribe(block:true) do |_delivery_info, _properties, body|
     puts " [x] Recieved #{body}"
+    sendMessage(body)
   end
 
 rescue Interrupt => _
