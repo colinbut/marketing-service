@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'A Microservice'
   s.authors = ["Colin But"]
   s.email = 'colin.but@outlook.com'
-  s.files = ["lib/registration_receiver.rb"]
+  s.files = ["lib/marketing-service.rb", "lib/app/registration_receiver.rb", "lib/app/marketing_email_sender.rb"]
   s.homepage = 'http://rubygems.org/gems/marketing-service'
   s.license = 'Unlicense'
 end
