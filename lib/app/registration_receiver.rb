@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bunny'
-require './marketing_email_sender.rb'
+require './marketing_email_processor.rb'
 require 'json'
 require 'ostruct'
 
@@ -12,6 +12,12 @@ class RegistrationReceiver
 
   channel = connection.create_channel
   queue = channel.queue('registration-marketing-queue')
+
+  marketingEmailProcessor = nil
+
+  def initialize()
+    marketingEmailProcessor = MarketingEmailProcessor.new
+  end
 
   begin
     puts ' [*] Waiting for messages. To exit press CTRL+C'
@@ -32,7 +38,10 @@ class RegistrationReceiver
                             json_object.address.postcode,
                             json_object.address.city,
                             json_object.address.country)
-      sendMessage(body)
+
+      # process
+      marketingEmailProcessor.process(registration_data)
+
     end
 
   rescue Interrupt => _

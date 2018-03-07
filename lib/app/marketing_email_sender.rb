@@ -15,7 +15,7 @@ class MarketingEmailSender
   end
 
   def sendMessage(message)
-    channel.default_exchange.publish('test message', routing_key: queue.name)
+    channel.default_exchange.publish(message, routing_key: queue.name)
     puts ' [x] Sent message to RabbitMQ'
     connection.close
   end
