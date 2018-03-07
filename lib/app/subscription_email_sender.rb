@@ -2,7 +2,7 @@
 
 require 'bunny'
 
-class MarketingEmailSender
+class SubscriptionEmailSender
 
   connection = Bunny.new
   channel = nil

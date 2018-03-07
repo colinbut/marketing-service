@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
-require './marketing_email_sender.rb'
+require './subscription_email_sender.rb'
 
-class MarketingEmailProcessor
+class SubscriptionEmailProcessor
   # Processor that decides whether to send email or not depending on selection selected
   # on registration
 
   marketing_email_sender = nil
 
   def initialize()
-    marketing_email_sender = MarketingEmailSender.new
+    subscription_email_sender = SubscriptionEmailSender.new
   end
 
   def process(registration_data)

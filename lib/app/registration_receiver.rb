@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bunny'
-require './marketing_email_processor.rb'
+require './subscription_email_processor.rb'
 require 'json'
 require 'ostruct'
 
@@ -13,10 +13,10 @@ class RegistrationReceiver
   channel = connection.create_channel
   queue = channel.queue('registration-marketing-queue')
 
-  marketingEmailProcessor = nil
+  subscriptionEmailSender = nil
 
   def initialize()
-    marketingEmailProcessor = MarketingEmailProcessor.new
+    subscriptionEmailSender = SubscriptionEmailSender.new
   end
 
   begin
@@ -40,7 +40,7 @@ class RegistrationReceiver
                             json_object.address.country)
 
       # process
-      marketingEmailProcessor.process(registration_data)
+      subscriptionEmailSender.process(registration_data)
 
     end
 
