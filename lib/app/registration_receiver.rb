@@ -2,23 +2,43 @@
 
 require 'bunny'
 require './marketing_email_sender.rb'
+require 'json'
+require 'ostruct'
 
-connection = Bunny.new
-connection.start
+class RegistrationReceiver
 
-channel = connection.create_channel
-queue = channel.queue('registration-marketing-queue')
+  connection = Bunny.new
+  connection.start
 
-begin
-  puts ' [*] Waiting for messages. To exit press CTRL+C'
+  channel = connection.create_channel
+  queue = channel.queue('registration-marketing-queue')
 
-  queue.subscribe(block:true) do |_delivery_info, _properties, body|
-    puts " [x] Recieved #{body}"
-    sendMessage(body)
+  begin
+    puts ' [*] Waiting for messages. To exit press CTRL+C'
+
+    queue.subscribe(block:true) do |_delivery_info, _properties, body|
+      puts " [x] Recieved #{body}"
+
+      # converting from JSON string to 'JSON' object
+      json_object = JSON.parse(body, object_class: OpenStruct)
+
+      # building model object from json
+      registration_data = RegistrationData.new(json_object.ssn,
+                            json_object.firstName,
+                            json_object.surname,
+                            json_object.surname,
+                            json_object.dob,
+                            json_object.address.address,
+                            json_object.address.postcode,
+                            json_object.address.city,
+                            json_object.address.country)
+      sendMessage(body)
+    end
+
+  rescue Interrupt => _
+    connection.close
+    exit(0)
+
   end
-
-rescue Interrupt => _
-  connection.close
-  exit(0)
 
 end

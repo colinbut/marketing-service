@@ -2,16 +2,21 @@
 
 require 'bunny'
 
-def sendMessage(message)
+class MarketingEmailSender
+
   connection = Bunny.new
-  connection.start
+  channel = nil
+  queue = nil
 
-  channel = connection.create_channel
+  def initialize()
+    connection.start
+    channel = connection.create_channel
+    queue = channel.queue('email-queue')
+  end
 
-  queue = channel.queue('email-queue')
-
-  channel.default_exchange.publish('test message', routing_key: queue.name)
-  puts ' [x] Sent message to RabbitMQ'
-
-  connection.close
+  def sendMessage(message)
+    channel.default_exchange.publish('test message', routing_key: queue.name)
+    puts ' [x] Sent message to RabbitMQ'
+    connection.close
+  end
 end
